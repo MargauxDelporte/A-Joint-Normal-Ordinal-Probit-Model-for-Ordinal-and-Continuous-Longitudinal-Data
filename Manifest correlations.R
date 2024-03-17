@@ -35,8 +35,8 @@ beta2 =c(0.053,-0.351,-0.219)
 #function to create the design matrix of the fixed effects of the continuous reponse
 cov=function(t1){
   if(t1==1){
-return(c(1,0,0,0,78))}
-  if(t1==8){
+    return(c(1,0,0,0,78))}
+  if(t1==5){
     return(c(1,1,0,0,78))}
   if(t1==12){
     return(c(1,0,1,0,78))}}
@@ -189,7 +189,7 @@ f_grad_tau=function(t1,t2,cat,re){
   covv=-1/L*z1%*%solve(M)%*%(z2)*dnorm(gamma3-xb2,sd=sqrt(1/L))
   
   sds=sqrt(((z1)%*%D%*%(z1)+ssigma)*phi*(1-phi))
-
+  
   Mstar=-solve(D)%*%Derivs%*%solve(D)
   Lstar=-(z2)%*%solve(M)%*%solve(D)%*%Derivs%*%solve(D)%*%solve(M)%*%(z2)
   phi=pnorm(gamma3-xb2,sd=sqrt(1/L))
@@ -207,7 +207,7 @@ f_grad_tau=function(t1,t2,cat,re){
     dnorm(gamma3-xb2,sd=sqrt(1/L))
   tellerd=1/L*dnorm(gamma3-xb2,sd=sqrt(1/L))*(
     z1%*%solve(M)%*%(z2)*(Lstar/L+
-                             Lstar*((gamma3-xb2)^2*L-1)/(2*L))-
+                            Lstar*((gamma3-xb2)^2*L-1)/(2*L))-
       z1%*%solve(M)%*%solve(D)%*%Derivs%*%solve(D)%*%solve(M)%*%(z2))
   result= -1/(rho^2-1)*1/sds^2*(
     tellerd*sds-noemerd*covv
@@ -272,7 +272,7 @@ standard_errors=function(t1,t2,cat){
 }
 
 #calculate the manifest correlations and standard errors for our case study
-times_c=c(1,8,12)
+times_c=c(1,5,12)
 times_b=c(1,3,5,8,12)
 printcorr=function(cat){
   matrixx=matrix(rep(0,3*5),nrow=3,ncol=5)
@@ -285,11 +285,10 @@ printcorr=function(cat){
   }
   matrixx=as.data.frame(matrixx)
   names(matrixx)=c('Impairment t=1','Impairment t=3','Impairment t=5','Impairment t=8','Impairment t=12')
-  row.names(matrixx)=c('ADLOT1 t=1','ADLOT1 t=8','ADLOT1 t=12')
+  row.names(matrixx)=c('ADLOT1 t=1','ADLOT1 t=5','ADLOT1 t=12')
   return(matrixx)}
 
 printcorr(1)
 printcorr(2)
-
 
 
