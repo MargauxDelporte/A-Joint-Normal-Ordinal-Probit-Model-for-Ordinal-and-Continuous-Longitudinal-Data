@@ -12,28 +12,28 @@ covb <- read_sas("covb.sas7bdat", NULL)
 Vcov=covb[,-c(1,2)]
 
 #create residual variance matrix
-sigma = diag(x = 	2.992, nrow = 5)
+sigma = diag(x = 	3.02, nrow = 5)
 
 #specify threshold values
-gammas=c(-19.254,-16.704)        
+gammas=c(-19.17,-16.61)        
 
 
 #coefficients of the fixed effects
 #continuous respons ADLTOT: intercept, time5, time12,gender,age
-beta1 =c(3.2825,-2.686,-3.579,-1.640,0.205)
+beta1 =c(3.42,-2.68,-3.62,-1.58,0.20)
 
 # ordinal respons MMSE: time gender age 
-beta2 =c(0.053,-0.351,-0.219)
+beta2 =c(0.04,-0.37,-0.22)
 
 #design matrix of the fixed effects of the continuous response
 cov=function(t1){
   if(t1==1){
     return(c(1,0,0,1,78))}
-  if(t1==8){
+  if(t1==5){
     return(c(1,1,0,1,78))}
   if(t1==12){
     return(c(1,0,1,1,78))}}
-X1=rbind(rbind(cov(1),cov(8)),cov(12))
+X1=rbind(rbind(cov(1),cov(5)),cov(12))
 #design matrix of the fixed effects of the ordinal response
 t1=c(1,1,78)
 t2=c(3,1,78)
@@ -43,7 +43,7 @@ t5=c(12,1,78)
 cov2=rbind(t1,t2,t3,t4,t5)
 
 #multiply the design matrices with the coefficient matrices of the fixed effects
-xb1a=c(cov(1)%*%beta1,cov(8)%*%beta1,cov(12)%*%beta1)
+xb1a=c(cov(1)%*%beta1,cov(5)%*%beta1,cov(12)%*%beta1)
 xb2a=cov2%*%beta2
 
 #design matrix of the random effects of the continuous response
@@ -60,7 +60,7 @@ predict = function(pred=3, cond_c=c(1,2),prey=c(16,16),cat_p=1) {
   ##denominator
   xb1=xb1a[cond_c]
   zb1=zb1a[cond_c,]
-  sig1=diag(x=2.992,nrow=length(cond_c))
+  sig1=diag(x=3.02,nrow=length(cond_c))
   xb2=xb2a[pred]
   zb2=zb2a[pred,]
   gamma3=c(gammas[cat_p])
@@ -83,7 +83,7 @@ gradient_b1 = function(pred=3, cond_c=c(1,2),prey=c(16,16),cat_p=2,nbeta) {
   X12ij=X1[cond_c,nbeta]
   xb1=xb1a[cond_c]
   zb1=zb1a[cond_c,]
-  sig1=diag(x=2.992,nrow=length(cond_c))
+  sig1=diag(x=3.02,nrow=length(cond_c))
   xb2=xb2a[pred]
   zb2=zb2a[pred,]
   gamma3=c(gammas[cat_p])
@@ -105,7 +105,7 @@ gradient_b2 = function(pred=3, cond_c=c(1,2),prey=c(16,16),cat_p=2,nbeta) {
   X2=cov2[c(pred),nbeta]
   xb1=xb1a[cond_c]
   zb1=zb1a[cond_c,]
-  sig1=diag(x=2.992,nrow=length(cond_c))
+  sig1=diag(x=3.02,nrow=length(cond_c))
   xb2=xb2a[pred]
   zb2=zb2a[pred,]
   gamma3=c(gammas[cat_p])
@@ -126,7 +126,7 @@ gradient_b2 = function(pred=3, cond_c=c(1,2),prey=c(16,16),cat_p=2,nbeta) {
 gradient_gamma=function(pred=3, cond_c=c(1,2),prey=c(16,16),cat_p=2,nbeta){
   xb1=xb1a[cond_c]
   zb1=zb1a[cond_c,]
-  sig1=diag(x=2.992,nrow=length(cond_c))
+  sig1=diag(x=3.02,nrow=length(cond_c))
   xb2=xb2a[pred]
   zb2=zb2a[pred,]
   gamma3=c(gammas[cat_p])
@@ -273,7 +273,7 @@ f_numeric=function(pred=3, cond_c=c(1,2),prey=c(16,16),cat_p=2,re,x) {
   D=D_cr(re,x)
   xb1=xb1a[cond_c]
   zb1=zb1a[cond_c,]
-  sig1=diag(x=2.992,nrow=length(cond_c))
+  sig1=diag(x=3.02,nrow=length(cond_c))
   xb2=xb2a[pred]
   zb2=zb2a[pred,]
   gamma3=c(gammas[cat_p])
@@ -298,7 +298,7 @@ f_grad_tau=function(pred=3, cond_c=c(1,2),prey=c(16,16),cat_p=2,re) {
   ##denominator
   xb1=xb1a[cond_c]
   zb1=zb1a[cond_c,]
-  sig1=diag(x=2.992,nrow=length(cond_c))
+  sig1=diag(x=3.02,nrow=length(cond_c))
   xb2=xb2a[pred]
   zb2=zb2a[pred,]
   gamma3=c(gammas[cat_p])
@@ -337,14 +337,14 @@ f_numeric_s=function(pred=3, cond_c=c(1,2),prey=c(16,16),cat_p=2,xx){
   return(c1)
 }
 f_reel_s=function(pred=3, cond_c=c(1,2),prey=c(16,16),cat_p=2){
-  y=2.992
+  y=3.02
   return((f_numeric_s(pred, cond_c, prey,cat_p,xx=y+0.00001)-f_numeric_s(pred, cond_c, prey,cat_p,xx=y))/0.00001)
 }
 #calculate the gradient of the logit transformed prediction with respect to the residual variance
 grad_sigma=function(pred=3, cond_c=c(1,2),prey=c(16,16),cat_p=2) {
   xb1=xb1a[cond_c]
   zb1=zb1a[cond_c,]
-  sig1=diag(x=2.992,nrow=length(cond_c))
+  sig1=diag(x=3.02,nrow=length(cond_c))
   xb2=xb2a[pred]
   zb2=zb2a[pred,]
   gamma3=c(gammas[cat_p])
@@ -398,8 +398,8 @@ confidence_int = function(pred=3, cond_c=c(1,2),prey=c(16,16),cat_p=2){
   start =c(pred,
     paste(round(prey[1],2),'-',round(prey[2],2)),
     cat_p,
-    round(mean, 3),
-    gsub(" ", "",paste('[',round(trans_lower, 3),' ; ',round(trans_upper, 3),']'))
+    round(mean, 2),
+    gsub(" ", "",paste('[',round(trans_lower, 2),' ; ',round(trans_upper, 2),']'))
   )
   return(start)
 }

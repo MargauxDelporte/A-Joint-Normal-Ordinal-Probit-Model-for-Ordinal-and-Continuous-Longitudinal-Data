@@ -17,25 +17,25 @@ Gmat=as.data.frame(covb[,c(-1,-2)])
 row.names(Gmat)=names(Gmat)
 
 #calculate the latent correlations
-cov2cor(D)
+round(cov2cor(D),2)
 
 #thresholds of the ordinal response
-gamma=c(-19.254,-16.704)  
+gamma=c(-19.17,-16.61)  
 
 #residual variance of the continuous response
-sigma = diag(x = 2.992, nrow = 5)     
+sigma = diag(x = 3.02, nrow = 5)     
 
 #coefficient of the fixed effects
 #respons 1: int, time5, time12,gender,age
-beta1 =c(3.282,-2.686,-3.579,-1.640,0.205)
+beta1 =c(3.42,-2.68,-3.62,-1.58,0.20)
 
 #respons 2: time gender age 
-beta2 =c(0.053,-0.351,-0.219)
+beta2 =c(0.04,-0.37,-0.22)
 
 #function to create the design matrix of the fixed effects of the continuous reponse
 cov=function(t1){
   if(t1==1){
-    return(c(1,0,0,0,78))}
+return(c(1,0,0,0,78))}
   if(t1==5){
     return(c(1,1,0,0,78))}
   if(t1==12){
@@ -189,7 +189,7 @@ f_grad_tau=function(t1,t2,cat,re){
   covv=-1/L*z1%*%solve(M)%*%(z2)*dnorm(gamma3-xb2,sd=sqrt(1/L))
   
   sds=sqrt(((z1)%*%D%*%(z1)+ssigma)*phi*(1-phi))
-  
+
   Mstar=-solve(D)%*%Derivs%*%solve(D)
   Lstar=-(z2)%*%solve(M)%*%solve(D)%*%Derivs%*%solve(D)%*%solve(M)%*%(z2)
   phi=pnorm(gamma3-xb2,sd=sqrt(1/L))
@@ -207,7 +207,7 @@ f_grad_tau=function(t1,t2,cat,re){
     dnorm(gamma3-xb2,sd=sqrt(1/L))
   tellerd=1/L*dnorm(gamma3-xb2,sd=sqrt(1/L))*(
     z1%*%solve(M)%*%(z2)*(Lstar/L+
-                            Lstar*((gamma3-xb2)^2*L-1)/(2*L))-
+                             Lstar*((gamma3-xb2)^2*L-1)/(2*L))-
       z1%*%solve(M)%*%solve(D)%*%Derivs%*%solve(D)%*%solve(M)%*%(z2))
   result= -1/(rho^2-1)*1/sds^2*(
     tellerd*sds-noemerd*covv
@@ -290,5 +290,6 @@ printcorr=function(cat){
 
 printcorr(1)
 printcorr(2)
+
 
 

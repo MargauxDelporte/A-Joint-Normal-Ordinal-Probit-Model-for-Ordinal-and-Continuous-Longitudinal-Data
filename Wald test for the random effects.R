@@ -7,6 +7,7 @@ library(Matrix)#construction block matrix
 library(aod) #wald test
 library(DescTools)
 
+
 ###import data####
 D_s <- read_excel("D.xlsx")
 D=as.matrix(D_s)
@@ -20,10 +21,11 @@ Gmat=covb[ind-2,ind]
 data.matrix(Gmat, rownames.force = NA)
 
 #parameter estimates of the random effects######
-tau31  =-5.8458
-tau32	=-2.5049
-tau41	=-25.5361
-tau42=	-5.1216
+tau31=	-6.47
+tau32=	7.84
+tau41=	-34.26
+tau42=	-14.57
+
 
 
 #perform wald test
